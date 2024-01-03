@@ -1,11 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { userSlice } from "./userSlice";
 import "../../styles/Profile.scss";
 
 function Profile() {
-	console.log("HELLO WORLDS")
 	const dispatch = useDispatch();
+
+	const [isEditing, setIsEditing] = useState(false);
 
 	const { auth } = useSelector((state) => state.auth);
 	const { user } = useSelector((state) => state.user);
@@ -34,18 +35,71 @@ function Profile() {
 			.catch((error) => {
 				console.error(error);
 			});
-	}, [auth?.isConnected, auth?.token, dispatch]);
+	}, [auth?.isConnected, auth?.token, user, dispatch]);
+
+	const updateName = () => {
+		const firstName = document.querySelector("#firstName").value;
+		const lastName = document.querySelector("#lastName").value;
+
+		fetch("http://localhost:3001/api/v1/user/profile", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + auth.token,
+			},
+			body: JSON.stringify({
+				firstName,
+				lastName,
+			}),
+		})
+			.then((response) => {
+				if (response.ok) {
+					setIsEditing(false);
+				}
+			})
+			// .then(() => {
+			// 	dispatch(
+			// 		userSlice.actions.updateUser({
+			// 			firstName,
+			// 			lastName,
+			// 		})
+			// 	);
+			// })
+			.catch((error) => {
+				console.error(error);
+			});
+	};
 
 	return (
 		<main className="main bg-dark">
 			<div className="header">
-				<h1>
-					Welcome back
-					<br />
-					{user?.firstName ? user.firstName : "firstName"}{" "}
-					{user?.lastName ? user.lastName : "lastName"}!
-				</h1>
-				<button className="edit-button">Edit Name</button>
+				{isEditing ? (
+					<div>
+						<h1>Welcome back</h1>
+						<div className="input-wrapper">
+							<input type="text" id="firstName" defaultValue={user.firstName} />
+							<input type="text" id="lastName" defaultValue={user.lastName} />
+						</div>
+						<button className="edit-button" onClick={() => updateName()}>
+							Save
+						</button>
+						<button className="edit-button" onClick={() => setIsEditing(false)}>
+							Cancel
+						</button>
+					</div>
+				) : (
+					<div>
+						<h1>
+							Welcome back
+							<br />
+							{user?.firstName ? user.firstName : "firstName"}{" "}
+							{user?.lastName ? user.lastName : "lastName"}!
+						</h1>
+						<button className="edit-button" onClick={() => setIsEditing(true)}>
+							Edit Name
+						</button>
+					</div>
+				)}
 			</div>
 			<h2 className="sr-only">Accounts</h2>
 			<section className="account">

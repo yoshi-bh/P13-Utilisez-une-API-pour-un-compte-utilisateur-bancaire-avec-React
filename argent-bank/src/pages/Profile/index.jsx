@@ -4,6 +4,7 @@ import { userSlice } from "./userSlice";
 import "../../styles/Profile.scss";
 
 function Profile() {
+	console.log("HELLO WORLDS")
 	const dispatch = useDispatch();
 
 	const { auth } = useSelector((state) => state.auth);

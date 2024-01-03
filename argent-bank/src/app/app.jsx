@@ -2,9 +2,11 @@ import {
 	BrowserRouter as Router,
 	Routes,
 	Route,
+	Navigate,
 } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./store";
+import PrivateRoutes from "../components/PrivateRoutes";
 import MainNav from "../components/MainNav";
 import Footer from "../components/Footer";
 import Home from "../pages/Home";
@@ -19,8 +21,10 @@ function App() {
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/login" element={<Login />} />
-					<Route path="/profile" element={<Profile />} />
-					{/* <Route path="*" element={<Navigate to="/user/12" />} /> */}
+					<Route element={<PrivateRoutes />}>
+						<Route path="/profile" element={<Profile />} />
+					</Route>
+					<Route path="*" element={<Navigate to="/" />} />
 				</Routes>
 				<Footer />
 			</Router>

@@ -3,13 +3,6 @@ import { authSlice } from "./authSlice";
 import "../../styles/Login.scss";
 import { useNavigate } from "react-router-dom";
 
-// import { useGetTokenQuery } from "../../services/authApi";
-
-// export const Fidelity = () => {
-//     const { data: fidelity, isLoading } = useGetFidelityQuery()
-//     return !isLoading && <div className="FidelityPoints">Vos points de fidélité s&#39;élèvent à { fidelity?.amount } points</div>
-// }
-
 function Login() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -45,7 +38,6 @@ function Login() {
 				<i className="fa fa-user-circle sign-in-icon"></i>
 				<h1>Sign In</h1>
 				<form onSubmit={handleSubmit}>
-					{/* <form> */}
 					<div className="input-wrapper">
 						<label htmlFor="username">Username</label>
 						<input type="text" id="username" />

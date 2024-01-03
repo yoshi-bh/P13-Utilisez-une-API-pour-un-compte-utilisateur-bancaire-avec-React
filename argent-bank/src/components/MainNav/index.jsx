@@ -8,6 +8,7 @@ function MainNav() {
 	const dispatch = useDispatch();
 
 	const { auth } = useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.user);
 
 	return (
 		<nav className="main-nav">
@@ -30,7 +31,7 @@ function MainNav() {
 				<div>
 					<Link className="main-nav-item" to="/profile">
 						<i className="fa fa-user-circle"></i>
-						{" Tony"}
+						{" " + user.firstName}
 					</Link>
 					<Link
 						className="main-nav-item"

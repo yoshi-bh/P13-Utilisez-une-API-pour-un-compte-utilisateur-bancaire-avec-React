@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { userSlice } from "./userSlice";
 import "../../styles/Profile.scss";
 
 function Profile() {
+	const dispatch = useDispatch();
+
 	const { auth } = useSelector((state) => state.auth);
-	const [user, setUser] = useState({});
+	const { user } = useSelector((state) => state.user);
 
 	useEffect(() => {
 		if (!auth?.isConnected) return;
@@ -20,13 +23,17 @@ function Profile() {
 				return response.json();
 			})
 			.then((data) => {
-				// console.log(data);
-				setUser(data.body);
+				dispatch(
+					userSlice.actions.updateUser({
+						firstName: data.body.firstName,
+						lastName: data.body.lastName,
+					})
+				);
 			})
 			.catch((error) => {
 				console.error(error);
 			});
-	}, [auth?.isConnected, auth?.token]);
+	}, [auth?.isConnected, auth?.token, dispatch]);
 
 	return (
 		<main className="main bg-dark">

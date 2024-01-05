@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { userSlice } from "./userSlice";
+import { getUserThunk, updateUserThunk } from "./userSlice";
 import Account from "../../components/Account";
 import "../../styles/Profile.scss";
 
@@ -15,60 +15,18 @@ function Profile() {
 	useEffect(() => {
 		if (!auth?.isConnected) return;
 
-		fetch("http://localhost:3001/api/v1/user/profile", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: "Bearer " + auth.token,
-			},
-		})
-			.then((response) => {
-				return response.json();
-			})
-			.then((data) => {
-				dispatch(
-					userSlice.actions.updateUser({
-						firstName: data.body.firstName,
-						lastName: data.body.lastName,
-					})
-				);
-			})
-			.catch((error) => {
-				console.error(error);
-			});
-	}, [auth?.isConnected, auth?.token, user, dispatch]);
+		dispatch(getUserThunk(auth.token));
+	}, [isEditing]);
 
 	const updateName = () => {
 		const firstName = document.querySelector("#firstName").value;
 		const lastName = document.querySelector("#lastName").value;
 
-		fetch("http://localhost:3001/api/v1/user/profile", {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: "Bearer " + auth.token,
-			},
-			body: JSON.stringify({
-				firstName,
-				lastName,
-			}),
-		})
-			.then((response) => {
-				if (response.ok) {
-					setIsEditing(false);
-				}
-			})
-			// .then(() => {
-			// 	dispatch(
-			// 		userSlice.actions.updateUser({
-			// 			firstName,
-			// 			lastName,
-			// 		})
-			// 	);
-			// })
-			.catch((error) => {
-				console.error(error);
-			});
+		dispatch(updateUserThunk({ token: auth.token, firstName, lastName })).then(
+			() => {
+				setIsEditing(false);
+			}
+		);
 	};
 
 	return (

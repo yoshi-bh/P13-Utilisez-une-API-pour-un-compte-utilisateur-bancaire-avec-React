@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { authSlice } from "./authSlice";
+import { loginThunk } from "./authSlice";
 import "../../styles/Login.scss";
 import { useNavigate } from "react-router-dom";
 
@@ -10,26 +10,14 @@ function Login() {
 	const handleSubmit = (evt) => {
 		evt.preventDefault();
 
-		fetch("http://localhost:3001/api/v1/user/login", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
+		dispatch(
+			loginThunk({
 				email: evt.target["username"].value,
 				password: evt.target["password"].value,
-			}),
-		})
-			.then((response) => {
-				return response.json();
 			})
-			.then((data) => {
-				dispatch(authSlice.actions.login(data.body.token));
-				navigate("/profile");
-			})
-			.catch((error) => {
-				console.error(error);
-			});
+		).then(() => {
+			navigate("/profile");
+		});
 	};
 
 	return (

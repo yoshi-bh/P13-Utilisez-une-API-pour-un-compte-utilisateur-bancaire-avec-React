@@ -3,7 +3,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 export const getUserThunk = createAsyncThunk(
 	"profile/getUserThunk",
 	async (token) => {
-		console.log(token);
 		return await (async () => {
 			const response = await fetch(
 				"http://localhost:3001/api/v1/user/profile",

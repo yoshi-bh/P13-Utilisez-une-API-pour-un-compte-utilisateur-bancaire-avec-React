@@ -186,16 +186,75 @@ paths:
           type: integer
         - in: body
           name: body
-          description: Update transaction category or note
+          description: Updated values for the transaction
           required: true
           schema:
-            $ref: "#/definitions/UpdatedTransactionDetails"
+            $ref: "#/definitions/TransactionDetails"
       responses:
         "200":
           description: Updated transaction details successfully
           schema:
             items:
               $ref: "#/definitions/TransactionDetails"
+        "400":
+          description: Invalid Fields
+        "404":
+          description: Transaction not found
+        "500":
+          description: Internal Server Error
+    post:
+      tags:
+        - Transactions Module
+      summary: Transactions API
+      security:
+        - Bearer: []
+      description: API for adding new transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: path
+          name: id
+          description: ID of the transaction you want to add
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: Values for the added transaction
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionDetails"
+      responses:
+        "200":
+          description: Transaction added successfully
+          schema:
+            items:
+              $ref: "#/definitions/TransactionDetails"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
+    delete:
+      tags:
+        - Transactions Module
+      summary: Transactions API
+      security:
+        - Bearer: []
+      description: API for deleting a transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: path
+          name: id
+          description: ID of the transaction you want to delete
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: Transaction deleted successfully
         "400":
           description: Invalid Fields
         "404":
